@@ -12,7 +12,12 @@ const handle = app.getRequestHandler();
   await app.prepare()
   const server = express()
 
-  server.use(nextI18NextMiddleware(nextI18next))
+  server.use(nextI18NextMiddleware(nextI18next), (req, res, next) => {
+    if (res.headersSent) {
+      console.log(`Request header sent:${res.headersSent}`)
+    }
+    next()
+  })
 
   server.get('*', (req, res) => handle(req, res))
 
